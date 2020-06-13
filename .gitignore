@@ -1,5 +1,6 @@
 /out/
 /resources/public/js/compiled/
+/resources/public/css
 /target/
 /*-init.clj
 /*.log
@@ -18,3 +19,4 @@
 .idea
 .vscode
 .vim
+
