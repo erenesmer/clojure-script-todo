@@ -1,0 +1,101 @@
+html, body {
+  margin: 0 auto;
+  padding: 0;
+  background-color: #000;
+  color: #fff;
+}
+
+.app {
+}
+
+.todo-container {
+  border: 1px solid #333;
+  display: flex;
+  margin-top: 100px;
+  width: 100%;
+  max-width: 70%;
+
+  .todo-item {
+    border: 1px dashed indianred;
+    width: 100%;
+    height: 82px;
+    padding: 0;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    align-content: center;
+    align-items: center;
+    align-self: center;
+
+    .todo-data {
+      display: flex;
+      flex: 1;
+      flex-direction: row;
+      align-content: center;
+      align-items: center;
+      align-self: center;
+
+      .todo-title {
+        font-size: 24px;
+
+        &.done {
+          text-decoration: line-through;
+        }
+      }
+
+      .todo-checkbox {
+        width: 15px;
+        height: 15px;
+        border: 1px solid #666;
+        background-color: indianred;
+        cursor: pointer;
+        margin: 0px 15px;
+
+        &.checked {
+          background-color: yellow;
+        }
+
+        &.unchecked {
+          background-color: #000;
+        }
+      }
+
+    }
+
+    .todo-toolbox {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+
+      a {
+        padding: 10px;
+        text-decoration: none;
+        transition: all ease-in-out .1s;
+        color: #fff;
+        border: 1px solid #fff;
+
+        &:hover {
+          opacity: 0.4;
+        }
+      }
+
+      //a.toggle-todo-button {
+      //  background-color: lightgreen;
+      //  color: #000;
+      //}
+      //
+      //a.delete-todo-button {
+      //  background-color: indianred;
+      //  color: #fff;
+      //}
+    }
+
+    .todo-color {
+      width: 7px;
+      height: 100%;
+      background-color: lightsalmon;
+      display: block;
+
+    }
+  }
+}
