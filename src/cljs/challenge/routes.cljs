@@ -6,7 +6,8 @@
    [secretary.core :as secretary]
    [goog.events :as gevents]
    [re-frame.core :as re-frame]
-   [challenge.events :as events]
+   [challenge.app.events :as events]
+   [challenge.app.views :refer [app]]
    ))
 
 (defn hook-browser-navigation! []
@@ -19,15 +20,9 @@
 
 (defn app-routes []
   (secretary/set-config! :prefix "#")
-  ;; --------------------
-  ;; define routes here
+
   (defroute "/" []
-    (re-frame/dispatch [::events/set-active-panel :home-panel])
+    (re-frame/dispatch [::events/set-active-panel [app :app]])
     )
 
-  (defroute "/about" []
-    (re-frame/dispatch [::events/set-active-panel :about-panel]))
-
-
-  ;; --------------------
   (hook-browser-navigation!))

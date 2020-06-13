@@ -1,4 +1,4 @@
-(ns challenge.events
+(ns challenge.app.events
   (:require
    [re-frame.core :as re-frame]
    [challenge.db :as db]

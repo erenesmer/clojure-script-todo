@@ -1,4 +1,4 @@
-(ns challenge.subs
+(ns challenge.app.subs
   (:require
    [re-frame.core :as re-frame]))
 

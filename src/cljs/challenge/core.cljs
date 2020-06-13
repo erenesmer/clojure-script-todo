@@ -3,10 +3,10 @@
    [reagent.core :as reagent]
    [reagent.dom :as rdom]
    [re-frame.core :as re-frame]
-   [challenge.events :as events]
    [challenge.routes :as routes]
-   [challenge.views :as views]
    [challenge.config :as config]
+   [challenge.app.views :as views]
+   [challenge.app.events :as events]
    ))
 
 
