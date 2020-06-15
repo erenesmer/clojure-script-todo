@@ -58,6 +58,12 @@
    [:h2.you-are-done "You are done! There is nothing to do.."]
    [:div.status-color-bar]])
 
+;; -- error
+(defn error-container [error]
+  [:div.error-container
+   [:h2.error-title "Something Went Wrong!"]
+   [:p.error-message (if (:status-text error) (str (:status-text error)))]])
+
 ;; -- todo-container
 (defn todo-container [todos]
   [:div.todo-container
@@ -75,8 +81,12 @@
     {:component-did-mount #(rf/dispatch [:fetch-todos])
      :reagent-render
                           (fn []
-                            (let [todos @(rf/subscribe [:todos])]
-                              [todo-container todos]
+                            (let [todos @(rf/subscribe [:todos])
+                                  error @(rf/subscribe [:error])]
+                              [:div#app
+                               [todo-container todos]
+                               (if error [error-container error])
+                               ]
                               ))}))
 
 ;(defn main-panel []
