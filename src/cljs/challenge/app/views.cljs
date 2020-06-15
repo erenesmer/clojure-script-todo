@@ -5,7 +5,7 @@
     [clojure.string :as str]
     [challenge.app.subs :as subs]
     [challenge.app.events :as events]
-    [challenge.icons :refer [archieve-icon delete-icon done-icon trash-icon]]))
+    [challenge.icons :refer [archieve-icon delete-icon done-icon trash-icon re-set-icon]]))
 
 
 ;; helpers
@@ -16,7 +16,7 @@
 ;; -- toggle-todo-button
 (defn todo-toggle-button [done]
   [:a.toggle-todo-button
-   (if done [done-icon] [archieve-icon])])
+   (if done [re-set-icon] [done-icon])])
 
 ;; -- delete-todo-button
 (defn todo-delete-button [id]
