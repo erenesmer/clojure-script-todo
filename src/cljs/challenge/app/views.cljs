@@ -5,7 +5,7 @@
     [clojure.string :as str]
     [challenge.app.subs :as subs]
     [challenge.app.events :as events]
-    [challenge.icons :refer [archieve-icon delete-icon done-icon trash-icon re-set-icon]]))
+    [challenge.icons :refer [archieve-icon delete-icon done-icon trash-icon re-set-icon loader-icon]]))
 
 
 ;; helpers
