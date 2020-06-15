@@ -5,16 +5,17 @@
 
 (defonce api-url "http://localhost:8000")
 
-(defn make-request [type url on-success on-failure]
+(defn make-request [type url on-success on-failure params]
   {:http-xhrio
    {
     :method          type
     :uri             (str api-url url)
     :format          (ajax/json-request-format)
     :response-format (ajax/json-response-format {:keywords? true})
+    :params          params
     :on-success      (if (vector? on-success) on-success [on-success])
-    :on-failure      (if (vector? on-failure) :common-on-failure [:common-on-failure])}}
-  )
+    :on-failure      (if (vector? on-failure) :common-on-failure [:common-on-failure])}})
+
 
 ;(defn make-request
 ;      [method url on-success on-failure]
