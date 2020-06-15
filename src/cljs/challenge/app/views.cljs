@@ -30,13 +30,13 @@
   [:div.todo-item
    [:div.todo-data
     [:h2.todo-title
-     {:class (str (if (get todo :done) "done"))}
-     (get todo :title)]
+     {:class (str (if (:done todo) "done"))}
+     (:title todo)]
     [:p.created-at (str "Created: " (format-date (:created todo)))]]
    [:div.todo-toolbox
     (todo-toggle-button (:id todo) (:done todo))
-    (todo-delete-button (get todo :id))]
-   [:div.todo-status-color {:class (if (get todo :done) "done")}]])
+    (todo-delete-button (:id todo))]
+   [:div.todo-status-color {:class (if (:done todo) "done")}]])
 
 ;; -- add-todo
 (defn create-todo []
