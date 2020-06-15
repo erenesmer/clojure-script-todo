@@ -23,7 +23,7 @@
 (rf/reg-event-fx
   :fetch-todos
   (fn [{db :db} _]
-    (make-request :get "" :fetch-todos-success :common-on-failure)))
+    (make-request :get "" :fetch-todos-success :common-on-failure nil)))
 
 (rf/reg-event-db
   :fetch-todos-success
@@ -34,3 +34,15 @@
   :common-on-failure
   (fn [db [_ error]]
     (assoc db :error error)))
+
+;; --create-todo
+(rf/reg-event-fx
+  :create-todo
+  (fn [db [_ data]]
+    (make-request :post "" :create-todo-success :common-on-failure {:title data})))
+
+(rf/reg-event-db
+  :create-todo-success
+  (fn [db [_ data]]
+    (println data)
+    (assoc-in db [:todos (:id data)] data)))
