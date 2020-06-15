@@ -14,18 +14,4 @@
     :response-format (ajax/json-response-format {:keywords? true})
     :params          params
     :on-success      (if (vector? on-success) on-success [on-success])
-    :on-failure      (if (vector? on-failure) :common-on-failure [:common-on-failure])}})
-
-
-;(defn make-request
-;      [method url on-success on-failure]
-;      {:http-xhrio {:method          method
-;                    :uri             (str api-url url)
-;                    :format          (json-request-format)
-;                    :response-format (json-response-format)
-;                    {:keywords? true}
-;                                     :on-success
-;                    (if (vector? on-success) on-success [on-success])
-;                                     :on-failure
-;                    (if (vector? on-failure) on-failure [on-failure])
-;                    }})
+    :on-failure      (if (vector? on-failure) on-failure [on-failure])}})
