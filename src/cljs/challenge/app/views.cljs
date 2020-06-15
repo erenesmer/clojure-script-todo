@@ -11,7 +11,7 @@
 ;; helpers
 (defn format-date
   [date]
-  (.toDateString (js/Date. date)))
+  (.toLocaleString (js/Date. date)))
 
 ;; -- toggle-todo-button
 (defn todo-toggle-button [done]
