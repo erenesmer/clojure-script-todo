@@ -13,6 +13,8 @@
    [day8.re-frame/tracing "0.5.5"]
    [clj-commons/secretary "1.2.4"]
    [garden "1.3.10"]
+   [cljs-ajax "0.8.0"]
+   [day8.re-frame/http-fx "0.1.6"]
    [ns-tracker "0.4.0"]]
 
   :plugins
@@ -87,9 +89,9 @@
 
   :profiles
   {:dev
-   {:dependencies [[binaryage/devtools "1.0.0"]
-                   [day8.re-frame/re-frame-10x "0.6.5"]]
-    :source-paths ["dev"]}
+         {:dependencies [[binaryage/devtools "1.0.0"]
+                         [day8.re-frame/re-frame-10x "0.6.5"]]
+          :source-paths ["dev"]}
 
    :prod {}}
 
