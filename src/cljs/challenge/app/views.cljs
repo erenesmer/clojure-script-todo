@@ -1,10 +1,24 @@
 (ns challenge.app.views
   (:require
-    [re-frame.core :as re-frame]
+    [re-frame.core :as rf]
+    [reagent.core :as reagent]
+    [clojure.string :as str]
     [challenge.app.subs :as subs]
+    [challenge.app.events :as events]
     [challenge.icons :refer [archieve-icon delete-icon done-icon trash-icon]]))
 
-;; todo-item
+;; -- toggle-todo-button
+(defn todo-toggle-button [done]
+  [:a.toggle-todo-button
+   (if done [done-icon] [archieve-icon])])
+
+;; -- delete-todo-button
+(defn todo-delete-button [id]
+  [:a.delete-todo-button
+   {:href     "#"
+    :on-click #(rf/dispatch [:delete-todo id])}
+   [trash-icon]])
+
 (defn todo-item [todo]
   [:div.todo-item
    [:div.todo-data
@@ -13,52 +27,50 @@
      (get todo :title)]
     [:p.created-at (str "Created: " (get todo :created-at))]]
    [:div.todo-toolbox
-    [:a.toggle-todo-button {:href "#"}
-     [done-icon]]
-    [:a.delete-todo-button {:href "#"}
-     [trash-icon]]]
+    (todo-toggle-button (get todo :done))
+    (todo-delete-button (get todo :id))]
    [:div.todo-status-color {:class (if (get todo :done) "done")}]])
 
-;; add-todo
+;; -- add-todo
 (defn create-todo []
-  [:div.create-todo
-   [:input.create-todo-input {:type "text" :placeholder "Create To Do"}]
-   [:a.create-todo-button {:href "#"} [done-icon]]])
+  (let [val ""]
+    [:div.create-todo
+     [:input.create-todo-input
+      {:type        "text"
+       :placeholder "Create To Do"}]
+     [:a.create-todo-button
+      {:href     "#"
+       :on-click #()}
+      [done-icon]]
+     ]))
 
-;; todo-container
+;; -- there-is-nothing-todo
+(defn nothing-to-do []
+  [:div.nothing-to-do
+   [:h2.you-are-done "You are done! There is nothing to do.."]
+   [:div.status-color-bar]])
+
+;; -- todo-container
 (defn todo-container [todos]
-  [:<>
+  [:div.todo-container
    [create-todo]
-   (for [todo todos]
-     ^{:key (str (get todo :id))}
-     [todo-item
-      todo])])
+   (if (pos? (count todos))
+     (for [todo todos]
+       ^{:key (:id todo)}
+       [todo-item todo])
+     [nothing-to-do])
+   ])
 
-;; app
-(defn
-  app []
-  (let [name (re-frame/subscribe [::subs/name])]
-    [:div.todo-container
-     [todo-container
-      [{:id         1
-        :title      "this is an example todo item lorem sdjhfakdsjfhajksdhfjasd fasdfjkahsdfkjahdskf asdhjfajksdfhak dskfjhads hjkfa dksjfhaksjd fhakjds fhakjs dkfjhas dfha skjdfhj kasdajks dfhads"
-        :done       true
-        :created-at (str (js/Date.))
-        :color      "blue"}
-       {:id         2
-        :title      "this is an second example todo item"
-        :done       false
-        :created-at (str (js/Date.))
-        :color      "red"}]]]))
+;; -- App
+(defn app []
+  (reagent/create-class
+    {:component-did-mount #(rf/dispatch [:fetch-todos])
+     :reagent-render
+                          (fn []
+                            (let [todos @(rf/subscribe [:todos])]
+                              [todo-container todos]
+                              ))}))
 
-;(defn- panels [panel-name]
-;  (case panel-name
-;        :app [app]
-;        [:div]))
-;
-;(defn show-panel [panel-name]
-;  [panels panel-name])
-;
 ;(defn main-panel []
-;  (let [active-panel (re-frame/subscribe [::subs/active-panel])]
+;  (let [active-panel (rf/subscribe [::subs/active-panel])]
 ;    [show-panel @active-panel]))
