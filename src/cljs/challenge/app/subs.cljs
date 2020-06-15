@@ -18,3 +18,7 @@
   (fn [db]
     (sort-by :id > (vals (:todos db)))))
 
+(reg-sub
+  :error
+  (fn [db]
+    (:error db)))
