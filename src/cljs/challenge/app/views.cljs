@@ -17,14 +17,13 @@
 (defn todo-toggle-button [id done]
   [:a.toggle-todo-button
    {:on-click #(rf/dispatch [:toggle-todo {:id id :done done}])
-    :class (if done "is-done" "todo")}
+    :class    (if done "is-done" "todo")}
    (if done [re-set-icon] [done-icon])])
 
 ;; -- delete-todo-button
 (defn todo-delete-button [id]
   [:a.delete-todo-button
-   {:href     "#"
-    :on-click #(rf/dispatch [:delete-todo id])}
+   {:on-click #(rf/dispatch [:delete-todo id])}
    [trash-icon]])
 
 (defn todo-item [todo]

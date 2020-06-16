@@ -3,6 +3,7 @@
     [re-frame.core :as rf]
     [challenge.db :as db]
     [day8.re-frame.tracing :refer-macros [fn-traced]]
+    [ajax.core :as ajax]
     [challenge.api :refer [make-request]]))
 
 (rf/reg-event-db
@@ -44,7 +45,6 @@
 (rf/reg-event-db
   :create-todo-success
   (fn [db [_ data]]
-    (println data)
     (assoc-in db [:todos (:id data)] data)))
 
 ;; -- toggle-todo
@@ -58,3 +58,16 @@
   (fn [db [_ data]]
     (assoc-in db [:todos (:id data)] data)
     ))
+
+;; --delete-todo
+(rf/reg-event-fx
+  :delete-todo
+  (fn [_ [_ id]]
+    (make-request :delete (str "/" id) [:delete-todo-success id] :common-on-failure nil)
+    ))
+
+(rf/reg-event-db
+  :delete-todo-success
+  (fn [db [_ id]]
+    (update-in db [:todos] dissoc (:todos db) id)))
+
