@@ -1,4 +1,4 @@
-(ns challenge.api
+(ns challenge.utils
   (:require
     [day8.re-frame.http-fx]
     [ajax.core :as ajax]))
@@ -17,7 +17,3 @@
     (if (not-empty params) (merge request-map {:params params :format (ajax/json-request-format)}) request-map)
     )
   )
-
-(defn make-request [method url on-success on-failure params]
-  {:http-xhrio
-   (get-request-map method url on-success on-failure params)})
