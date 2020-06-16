@@ -3,7 +3,6 @@
     [re-frame.core :as rf]
     [challenge.db :as db]
     [day8.re-frame.tracing :refer-macros [fn-traced]]
-    [ajax.core :as ajax]
     [challenge.api :refer [make-request]]))
 
 (rf/reg-event-db

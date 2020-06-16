@@ -2,9 +2,9 @@
   (:require
     [re-frame.core :as rf]
     [reagent.core :as r]
-    [clojure.string :as str]
-    [challenge.app.subs :as subs]
-    [challenge.app.events :as events]
+    [clojure.string]
+    [challenge.app.subs]
+    [challenge.app.events]
     [challenge.icons :refer [archieve-icon delete-icon done-icon trash-icon re-set-icon loader-icon]]))
 
 
