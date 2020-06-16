@@ -11,17 +11,14 @@
   (s/and (s/map-of ::id ::todo)
          #(instance? PersistentTreeMap %)))
 
-(s/def ::showing
-  #{:all
-    :active
-    :done})
+(s/def ::loading boolean?)
 
 (s/def ::name string?)
 
-(s/def ::db (s/keys :req-un [::todos ::showing ::name]))
+(s/def ::db (s/keys :req-un [::todos ::loading ::name]))
 
 ;; -- DB
 (def default-db
   {:name    "we love challengeZ"
    :todos   (sorted-map)
-   :showing :all})
+   :loading false})
