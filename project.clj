@@ -13,8 +13,7 @@
    [day8.re-frame/tracing "0.5.5"]
    [clj-commons/secretary "1.2.4"]
    [garden "1.3.10"]
-   [cljs-ajax "0.8.0"]
-   [day8.re-frame/http-fx "0.1.6"]
+   [day8.re-frame/http-fx "v0.2.0"]
    [ns-tracker "0.4.0"]]
 
   :plugins
