@@ -19,6 +19,11 @@
     (sort-by :id > (vals (:todos db)))))
 
 (reg-sub
+  :loading
+  (fn [db]
+    (:loading db)))
+
+(reg-sub
   :error
   (fn [db]
     (:error db)))
