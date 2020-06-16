@@ -7,6 +7,7 @@
 @black: #000;
 
 @background-color: #000;
+@transparent-background: rgba(0, 0, 0, .8);
 @default-color: #fff;
 
 @border-color: #2f2f2f;
@@ -19,22 +20,25 @@ html, body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 
-.app {
-}
-
 svg {
   width: 14px;
   height: 14px;
 }
 
 .todo-container {
-  //border: 1px solid #333;
   margin: 75px auto;
   display: flex;
   flex-direction: column;
   justify-content: center;
   width: 100%;
   max-width: 700px;
+  position: relative;
+
+  &[disabled] {
+    cursor: progress;
+    pointer-events: none;
+    opacity: 0.2;
+  }
 
   .create-todo {
     width: 100%;
@@ -66,7 +70,6 @@ svg {
       &:hover {
         opacity: .7;
       }
-
     }
 
     &:hover {
@@ -157,16 +160,6 @@ svg {
           }
         }
       }
-
-      //a.toggle-todo-button {
-      //  background-color: lightgreen;
-      //  color: #000;
-      //}
-      //
-      //a.delete-todo-button {
-      //  background-color: indianred;
-      //  color: #fff;
-      //}
     }
 
     .todo-status-color {
@@ -203,6 +196,36 @@ svg {
       height: 100%;
       display: block;
       background-color: @orange;
+    }
+  }
+}
+
+.loading-container {
+  background-color: @transparent-background;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  svg {
+    width: 34px;
+    height: 34px;
+    -webkit-animation: rotation 3s infinite linear;
+  }
+
+  h1.loading-text {
+    font-weight: 200;
+  }
+
+  @-webkit-keyframes rotation {
+    from {
+      -webkit-transform: rotate(0deg);
+    }
+    to {
+      -webkit-transform: rotate(359deg);
     }
   }
 }

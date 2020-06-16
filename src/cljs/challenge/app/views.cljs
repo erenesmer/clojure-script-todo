@@ -7,7 +7,6 @@
     [challenge.app.events]
     [challenge.icons :refer [archieve-icon delete-icon done-icon trash-icon re-set-icon loader-icon]]))
 
-
 ;; helpers
 (defn format-date
   [date]
@@ -26,11 +25,12 @@
    {:on-click #(rf/dispatch [:delete-todo id])}
    [trash-icon]])
 
+;; -- todo-item
 (defn todo-item [todo]
   [:div.todo-item
    [:div.todo-data
     [:h2.todo-title
-     {:class (str (if (:done todo) "done"))}
+     {:class (if (:done todo) "done")}
      (:title todo)]
     [:p.created-at (str "Created: " (format-date (:created todo)))]]
    [:div.todo-toolbox
@@ -38,17 +38,17 @@
     (todo-delete-button (:id todo))]
    [:div.todo-status-color {:class (if (:done todo) "done")}]])
 
-;; -- add-todo
+;; -- create-todo
 (defn create-todo []
   (let [val (r/atom "")]
     [:div.create-todo
      [:input.create-todo-input
       {:type        "text"
        :placeholder "Create To Do"
-       :on-change   #(reset! val (-> % .-target .-value))}]
+       :on-change   #(reset! val (-> % .-target .-value))
+       }]
      [:a.create-todo-button
-      {:href     "#"
-       :on-click #(rf/dispatch [:create-todo @val])}
+      {:on-click #(rf/dispatch [:create-todo @val])}
       [done-icon]]
      ]
     ))
@@ -59,14 +59,15 @@
    [:h2.you-are-done "You are done! There is nothing to do.."]
    [:div.status-color-bar]])
 
-;; -- error
-(defn error-container [error]
-  [:div.error-container
-   [:h2.error-title "Something Went Wrong!"]
-   [:p.error-message (if (:status-text error) (str (:status-text error)))]])
+;; -- loading-container
+(defn loading-container []
+  [:div.loading-container
+   [loader-icon]
+   [:h1.loading-text "Loading.."]
+   ])
 
 ;; -- todo-container
-(defn todo-container [todos]
+(defn todo-container [todos is-loading]
   [:div.todo-container
    [create-todo]
    (if (pos? (count todos))
@@ -74,7 +75,16 @@
        ^{:key (:id todo)}
        [todo-item todo])
      [nothing-to-do])
+   (if (pos? is-loading) [loading-container])
    ])
+
+;; -- error
+(defn error-container [error]
+  [:div.error-container
+   [:h2.error-title "Something Went Wrong!"]
+   [:p.error-message (if (:error-message (:response error))
+                       (str (:error-message (:response error)))
+                       (str (:status-text error)))]])
 
 ;; -- App
 (defn app []
@@ -83,10 +93,11 @@
      :reagent-render
                           (fn []
                             (let [todos @(rf/subscribe [:todos])
-                                  error @(rf/subscribe [:error])]
-                              [:div#app
-                               [todo-container todos]
-                               (if error [error-container error])
+                                  error @(rf/subscribe [:error])
+                                  loading @(rf/subscribe [:loading])]
+                              [:<>
+                               [todo-container todos loading]
+                               (when error [error-container error])
                                ]
                               ))}))
 
