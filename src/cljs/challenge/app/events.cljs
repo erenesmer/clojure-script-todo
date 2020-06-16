@@ -4,7 +4,7 @@
     [challenge.db :as db]
     [cljs.spec.alpha :as s]
     [day8.re-frame.tracing :refer-macros [fn-traced]]
-    [challenge.api :refer [make-request]]))
+    [challenge.utils :refer [get-request-map]]))
 
 (rf/reg-event-db
   ::initialize-db
@@ -23,54 +23,102 @@
 ;; fetch-todos
 (rf/reg-event-fx
   :fetch-todos
-  (fn [_ _]
-    (make-request :get "" :fetch-todos-success :common-on-failure nil)))
+  (fn [{:keys [db]} [_ response]]
+    {:http-xhrio (get-request-map :get "" :fetch-todos-success :common-on-failure nil)
+     :db         (-> db
+                     (assoc :loading true)
+                     (assoc :error nil)
+                     )
+     }))
 
 (rf/reg-event-db
   :fetch-todos-success
   (fn [db [_ response]]
-    (assoc db :todos (index-by-id (:data response)))))
+    (-> db
+        (assoc :loading false)
+        (assoc :todos (index-by-id (:data response)))
+        )))
 
 (rf/reg-event-db
   :common-on-failure
   (fn [db [_ error]]
-    (assoc db :error error)))
+    (-> db
+        (assoc :error error)
+        (assoc :loading false)
+        )))
 
-;; --create-todo
+;; -- create-todo
 (rf/reg-event-fx
   :create-todo
-  (fn [db [_ data]]
-    (make-request :post "" :create-todo-success :common-on-failure {:title   data
-                                                                    :done    false
-                                                                    :created (js/Date.)
-                                                                    })))
+  (fn [{:keys [db]} [_ data]]
+    {:http-xhrio
+         (get-request-map
+           :post
+           ""
+           :create-todo-success
+           :common-on-failure
+           {:title   data
+            :done    false
+            :created (js/Date.)
+            })
+     :db (-> db
+             (assoc :loading true)
+             (assoc :error nil)
+             )}))
 
 (rf/reg-event-db
   :create-todo-success
   (fn [db [_ response]]
-    (assoc-in db [:todos (:id (:data response))] (:data response))))
+    (-> db
+        (assoc-in [:todos (:id (:data response))] (:data response))
+        (assoc :loading false)
+        )))
 
 ;; -- toggle-todo
 (rf/reg-event-fx
   :toggle-todo
-  (fn [_ [_ data]]
-    (make-request :patch (str "/" (:id data)) :toggle-todo-success :common-on-failure {:done (not (:done data))})))
+  (fn [{:keys [db]} [_ data]]
+    {:http-xhrio (get-request-map
+                   :patch
+                   (str "/" (:id data))
+                   :toggle-todo-success
+                   :common-on-failure
+                   {:done (not (:done data))})
+     :db         (-> db
+                     (assoc :loading true)
+                     (assoc :error nil)
+                     )}))
+
 
 (rf/reg-event-db
   :toggle-todo-success
   (fn [db [_ response]]
-    (assoc-in db [:todos (:id (:data response))] (:data response))
+    (-> db
+        (assoc-in [:todos (:id (:data response))] (:data response))
+        (assoc :loading false)
+        )
     ))
 
 ;; --delete-todo
 (rf/reg-event-fx
   :delete-todo
-  (fn [_ [_ id]]
-    (make-request :delete (str "/" id) [:delete-todo-success id] :common-on-failure nil)
-    ))
+  (fn [{:keys [db]} [_ id]]
+    {:http-xhrio (get-request-map
+                   :delete
+                   (str "/" id)
+                   [:delete-todo-success id]
+                   :common-on-failure
+                   nil)
+     :db         (-> db
+                     (assoc :loading true)
+                     (assoc :error nil)
+                     )}))
 
 (rf/reg-event-db
   :delete-todo-success
   (fn [db [_ id]]
-    (update-in db [:todos] dissoc (:todos db) id)))
-
+    (-> db
+        (update-in [:todos] dissoc (:todos db) id)
+        (assoc :loading false)
+        )
+    ))
