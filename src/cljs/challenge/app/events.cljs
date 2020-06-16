@@ -2,6 +2,7 @@
   (:require
     [re-frame.core :as rf]
     [challenge.db :as db]
+    [cljs.spec.alpha :as s]
     [day8.re-frame.tracing :refer-macros [fn-traced]]
     [challenge.api :refer [make-request]]))
 
@@ -15,7 +16,7 @@
   (fn-traced [db [_ active-panel]]
              (assoc db :active-panel active-panel)))
 
-;;
+;; --helpers
 (defn index-by-id [col]
   (into {} (map (juxt :id identity) col)))
 
@@ -27,8 +28,8 @@
 
 (rf/reg-event-db
   :fetch-todos-success
-  (fn [db [_ data]]
-    (assoc db :todos (index-by-id data))))
+  (fn [db [_ response]]
+    (assoc db :todos (index-by-id (:data response)))))
 
 (rf/reg-event-db
   :common-on-failure
@@ -38,13 +39,16 @@
 ;; --create-todo
 (rf/reg-event-fx
   :create-todo
-  (fn [_ [_ data]]
-    (make-request :post "" :create-todo-success :common-on-failure {:title data})))
+  (fn [db [_ data]]
+    (make-request :post "" :create-todo-success :common-on-failure {:title   data
+                                                                    :done    false
+                                                                    :created (js/Date.)
+                                                                    })))
 
 (rf/reg-event-db
   :create-todo-success
-  (fn [db [_ data]]
-    (assoc-in db [:todos (:id data)] data)))
+  (fn [db [_ response]]
+    (assoc-in db [:todos (:id (:data response))] (:data response))))
 
 ;; -- toggle-todo
 (rf/reg-event-fx
@@ -54,8 +58,8 @@
 
 (rf/reg-event-db
   :toggle-todo-success
-  (fn [db [_ data]]
-    (assoc-in db [:todos (:id data)] data)
+  (fn [db [_ response]]
+    (assoc-in db [:todos (:id (:data response))] (:data response))
     ))
 
 ;; --delete-todo
