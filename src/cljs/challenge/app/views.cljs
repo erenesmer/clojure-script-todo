@@ -100,7 +100,3 @@
                                (when error [error-container error])
                                ]
                               ))}))
-
-;(defn main-panel []
-;  (let [active-panel (rf/subscribe [::subs/active-panel])]
-;    [show-panel @active-panel]))
