@@ -1,4 +1,4 @@
-# Pisano Challenge - Todo
+# ClojureScript - Todo
 
 ## Getting Started
 This is the main challenge app, built with ClojureScript. This client app needs a back-end server to make a request and get a response to show something on browser / UI. 
